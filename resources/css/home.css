@@ -1,0 +1,7 @@
+#editUsuario {
+    display: none !important;
+}
+
+#createUsuario {
+    display: block !important;
+}
