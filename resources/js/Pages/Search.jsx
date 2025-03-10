@@ -353,8 +353,6 @@ export default function Search() {
             label: 'Formación Profesional de Grado Superior',
         },
         { value: 'Grado universitario', label: 'Grado universitario' },
-        { value: 'Máster', label: 'Máster' },
-        { value: 'Doctorado', label: 'Doctorado' },
     ];
 
     const specialtyOptions = [

@@ -360,8 +360,6 @@ export default function ModifyUserFormSearch({
             label: 'Formación Profesional de Grado Superior',
         },
         { value: 'Grado universitario', label: 'Grado universitario' },
-        { value: 'Máster', label: 'Máster' },
-        { value: 'Doctorado', label: 'Doctorado' },
     ];
 
     const specialtyOptions = [
@@ -6202,6 +6200,8 @@ export default function ModifyUserFormSearch({
                     'discapacidad',
                     'nivel_estudios',
                     'especialidad',
+                    'formacion_complementaria',
+                    'experiencia_laboral',
                     'programa_oal',
                     'año_programa_oal',
                     'programa_oal_2',
@@ -6907,8 +6907,36 @@ export default function ModifyUserFormSearch({
                                             '.'}
                                 </Form.Text>
                             </Form.Group>
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formComplementario"
+                            >
+                                <Form.Label className="fs-4">
+                                    Formación complementaria
+                                </Form.Label>
+                                <Form.Control
+                                    {...register2('formacion_comp')}
+                                    as="textarea"
+                                    placeholder="Añada si tiene alguna formación complementaria"
+                                    rows={3}
+                                />
+                            </Form.Group>
                         </div>
                         <div className="container mx-5">
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formExperiencia"
+                            >
+                                <Form.Label className="fs-4">
+                                    Experiencia laboral
+                                </Form.Label>
+                                <Form.Control
+                                    {...register2('experiencia')}
+                                    as="textarea"
+                                    placeholder="Añada si tiene alguna experiencia laboral"
+                                    rows={3}
+                                />
+                            </Form.Group>
                             <Form.Group
                                 className="mb-3"
                                 controlId="formPrograma"
@@ -7309,6 +7337,8 @@ export default function ModifyUserFormSearch({
                             <th>Discapacidad</th>
                             <th>Nivel de estudios</th>
                             <th>Especialidades</th>
+                            <th>Formación complementaria</th>
+                            <th>Experiencia laboral</th>
                             <th>Programa</th>
                             <th>Año Programa</th>
                             <th>Programa 2</th>
@@ -7376,6 +7406,12 @@ export default function ModifyUserFormSearch({
                                             </span>
                                         ),
                                     )}
+                                </td>
+                                <td onClick={modificarUsuario(usuario.id)}>
+                                    {usuario.formacion_complementaria}
+                                </td>
+                                <td onClick={modificarUsuario(usuario.id)}>
+                                    {usuario.experiencia_laboral}
                                 </td>
                                 <td onClick={modificarUsuario(usuario.id)}>
                                     {usuario.programa_oal}

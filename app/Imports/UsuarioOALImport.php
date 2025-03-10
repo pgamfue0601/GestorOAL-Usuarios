@@ -13,17 +13,19 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 
 HeadingRowFormatter::default('none');
 
-class UsuarioOALImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, SkipsEmptyRows, WithValidation, SkipsOnError
+class UsuarioOALImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, SkipsEmptyRows, WithValidation, SkipsOnError, SkipsOnFailure
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    use SkipsErrors;
+    use SkipsErrors, SkipsFailures;
 
     public function model(array $row)
     {
@@ -48,11 +50,11 @@ class UsuarioOALImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
             'localidad' => $row['Localidad'],
             'observaciones' => $row['Observaciones'],
             'programa_oal' => $row['Programa_oal'],
-            'año_programa_oal' => (int)$row['year_programa'],
+            'año_programa_oal' => $row['year_programa'] ? (int)$row['year_programa'] : null,
             'programa_oal_2' => $row['Programa_oal_2'],
-            'año_programa_oal_2' => (int)$row['year_programa_2'],
+            'año_programa_oal_2' => $row['year_programa_2'] ? (int)$row['year_programa_2'] : null,
             'programa_oal_3' => $row['Programa_oal_3'],
-            'año_programa_oal_3' => (int)$row['year_programa_3'],
+            'año_programa_oal_3' => $row['year_programa_3'] ? (int)$row['year_programa_3'] : null,
         ]);
     }
 

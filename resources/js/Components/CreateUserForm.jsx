@@ -349,8 +349,6 @@ export default function CreateUserForm() {
             label: 'Formación Profesional de Grado Superior',
         },
         { value: 'Grado universitario', label: 'Grado universitario' },
-        { value: 'Máster', label: 'Máster' },
-        { value: 'Doctorado', label: 'Doctorado' },
     ];
 
     const specialtyOptions = [
@@ -6558,8 +6556,36 @@ export default function CreateUserForm() {
                                             '.'}
                                 </Form.Text>
                             </Form.Group>
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formComplementario"
+                            >
+                                <Form.Label className="fs-4">
+                                    Formación complementaria
+                                </Form.Label>
+                                <Form.Control
+                                    {...register('formacion_comp')}
+                                    as="textarea"
+                                    placeholder="Añada si tiene alguna formación complementaria"
+                                    rows={3}
+                                />
+                            </Form.Group>
                         </div>
                         <div className="container mx-5">
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formExperiencia"
+                            >
+                                <Form.Label className="fs-4">
+                                    Experiencia laboral
+                                </Form.Label>
+                                <Form.Control
+                                    {...register('experiencia')}
+                                    as="textarea"
+                                    placeholder="Añada si tiene alguna experiencia laboral"
+                                    rows={3}
+                                />
+                            </Form.Group>
                             <Form.Group
                                 className="mb-3"
                                 controlId="formPrograma"

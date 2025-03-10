@@ -24,6 +24,8 @@ class UsuarioOAL extends Model
         'discapacidad',
         'nivel_estudios',
         'especialidad',
+        'formacion_complementaria',
+        'experiencia_laboral',
         'disponibilidad',
         'carnet',
         'vehiculo',
