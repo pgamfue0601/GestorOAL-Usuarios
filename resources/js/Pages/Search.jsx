@@ -6136,10 +6136,17 @@ export default function Search() {
         },
     ];
 
+    const edadOptions = [
+        { value: 'menor', label: 'Menor que' },
+        { value: 'mayor', label: 'Mayor que' },
+        { value: 'entre', label: 'Entre' },
+    ];
+
     const [search, setSearch] = useState(false);
     const [contadorUsuarios, setContadorUsuarios] = useState(0);
     const [usuariosOAL, setUsuariosOAL] = useState([]);
     const [usuariosPDF, setUsuariosPDF] = useState([]);
+    const [edadRange, setEdadRange] = useState(false);
 
     const actualYear = new Date().getFullYear();
 
@@ -6177,8 +6184,8 @@ export default function Search() {
                                     ? data.apellidos
                                     : null,
                                 sexo: data.sexo ? data.sexo.value : null,
-                                edad: data.edad
-                                    ? formatoFechaSimple(data.edad)
+                                edad: data.edadSelect
+                                    ? data.edadSelect.value
                                     : null,
                                 telefono: data.telefono ? data.telefono : null,
                                 dni: data.dni ? data.dni : null,
@@ -6202,6 +6209,12 @@ export default function Search() {
                                     : null,
                                 especialidad: data.especialidad
                                     ? specialtyArray
+                                    : null,
+                                formacion_complementaria: data.formacion_comp
+                                    ? data.formacion_comp
+                                    : null,
+                                experiencia_laboral: data.experiencia
+                                    ? data.experiencia
                                     : null,
                                 programa_oal: data.programa
                                     ? data.programa.value
@@ -6236,11 +6249,18 @@ export default function Search() {
                                     : null,
                             };
 
+                            let edadData = {
+                                edadNumero: data.edadNumero,
+                                minEdad: data.minEdad,
+                                maxEdad: data.maxEdad,
+                            };
                             axios
-                                .post('/usuario/search', newData)
+                                .post('/usuario/search', { newData, edadData })
                                 .then((response) => {
                                     setContadorUsuarios(response.data.contador);
                                     setUsuariosOAL(response.data.usuarios);
+                                    //Recordatorio, usuariosPDF no son los usuarios que tengan PDFs, sino para preparar los usuarios
+                                    //encontrados en la búsqueda para exportar a PDF
                                     setUsuariosPDF(response.data.usuariosPDF);
                                     setSearch(true);
                                 })
@@ -6316,13 +6336,62 @@ export default function Search() {
                                     <Form.Label className="fs-4">
                                         Edad
                                     </Form.Label>
-                                    <input
-                                        {...register('edad')}
-                                        id="edad"
-                                        className="form-control"
-                                        type="date"
-                                        name="edad"
-                                    />
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <Controller
+                                            name="edadSelect"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    options={edadOptions}
+                                                    placeholder="Selecciona una opción."
+                                                    noOptionsMessage={() =>
+                                                        'No se ha encontrado dicha opción.'
+                                                    }
+                                                    onChange={(opcion) => {
+                                                        field.onChange(opcion);
+                                                        if (
+                                                            opcion.value ===
+                                                            'entre'
+                                                        ) {
+                                                            setEdadRange(true);
+                                                        } else {
+                                                            setEdadRange(false);
+                                                        }
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                        {edadRange ? (
+                                            <div className="d-flex justify-content-between">
+                                                <div>
+                                                    <Form.Control
+                                                        className="my-1"
+                                                        type="number"
+                                                        as="input"
+                                                        {...register('minEdad')}
+                                                        min={0}
+                                                    />
+                                                    <Form.Control
+                                                        className="my-1"
+                                                        type="number"
+                                                        as="input"
+                                                        {...register('maxEdad')}
+                                                        min={0}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <Form.Control
+                                                    type="number"
+                                                    as="input"
+                                                    {...register('edadNumero')}
+                                                    min={0}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                     <Form.Text className="text-danger">
                                         {errors.edad?.message}
                                     </Form.Text>
@@ -6523,8 +6592,36 @@ export default function Search() {
                                         )}
                                     />
                                 </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formComplementario"
+                                >
+                                    <Form.Label className="fs-4">
+                                        Formación complementaria
+                                    </Form.Label>
+                                    <Form.Control
+                                        {...register('formacion_comp')}
+                                        as="textarea"
+                                        placeholder="Añada si tiene alguna formación complementaria"
+                                        rows={3}
+                                    />
+                                </Form.Group>
                             </div>
                             <div className="container mx-5">
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formExperiencia"
+                                >
+                                    <Form.Label className="fs-4">
+                                        Experiencia laboral
+                                    </Form.Label>
+                                    <Form.Control
+                                        {...register('experiencia')}
+                                        as="textarea"
+                                        placeholder="Añada si tiene alguna experiencia laboral"
+                                        rows={3}
+                                    />
+                                </Form.Group>
                                 <Form.Group
                                     className="mb-3"
                                     controlId="formPrograma"

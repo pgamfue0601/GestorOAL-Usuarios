@@ -1,7 +1,6 @@
 import CreateUserForm from '@/Components/CreateUserForm';
 import ModifyUserForm from '@/Components/ModifyUserForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import OALHeaderLayout from '@/Layouts/OALHeaderLayout';
 import { Head } from '@inertiajs/react';
 
 const Dashboard = ({ usuariosOAL, contadorUsuarios }) => {
@@ -9,7 +8,6 @@ const Dashboard = ({ usuariosOAL, contadorUsuarios }) => {
         <>
             <AuthenticatedLayout>
                 <Head title="Índice" />
-                <OALHeaderLayout />
 
                 {/* Formulario de creación de usuarios */}
                 <CreateUserForm />

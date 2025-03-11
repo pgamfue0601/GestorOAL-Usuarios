@@ -182,8 +182,6 @@ class DocumentosUsuariosController extends Controller
                     Storage::disk('public')->deleteDirectory($dirPath);
                 }
             }
-
-            return to_route('dashboard');
         } catch (\Exception $e) {
             \Log::error('Error eliminando documentos: ' . $e->getMessage());
             return false;

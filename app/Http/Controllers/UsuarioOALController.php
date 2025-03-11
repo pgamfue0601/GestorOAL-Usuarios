@@ -91,6 +91,7 @@ class UsuarioOALController extends Controller
         $usuarioOAL = UsuarioOAL::find($id);
         DocumentosUsuariosController::destroyAllDocsUser($usuarioOAL->id);
         $usuarioOAL->delete();
+        return to_route('dashboard');
     }
 
     //Funcion para recoger la edad
@@ -131,10 +132,8 @@ class UsuarioOALController extends Controller
     }
 
     public function searchUsers(Request $request){
-        $search = $request->all();
-        // foreach ($search['especialidad'] as $valor) {
-        //     dd($valor);
-        // }
+        $search = $request->all()['newData'];
+        $edadData = $request->all()['edadData'];
         $usuarios = UsuarioOAL::query();
         if (isset($search['nombre']) && !empty($search['nombre'])) {
             $usuarios->where('nombre', 'like', '%'.$search['nombre'].'%');
@@ -149,7 +148,26 @@ class UsuarioOALController extends Controller
             $usuarios->where('dni', 'like', '%'.$search['dni'].'%');
         }
         if (isset($search['edad']) && !empty($search['edad'])) {
-            $usuarios->where('edad', 'like', '%'.$search['edad'].'%');
+            switch ($search['edad']) {
+                case 'menor':
+                    $usuarios->where(function($query) use ($edadData) {
+                        $query->whereRaw("STR_TO_DATE(edad, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL ? YEAR)", [$edadData['edadNumero']]);
+                    });
+                    break;
+                case 'mayor':
+                    $usuarios->where(function($query) use ($edadData) {
+                        $query->whereRaw("STR_TO_DATE(edad, '%d/%m/%Y') <= DATE_SUB(CURDATE(), INTERVAL ? YEAR)", [$edadData['edadNumero']]);
+                    });
+                    break;
+                case 'entre':
+                    $usuarios->where(function($query) use ($edadData) {
+                        $query->whereRaw("STR_TO_DATE(edad, '%d/%m/%Y') <= DATE_SUB(CURDATE(), INTERVAL ? YEAR)", [$edadData['minEdad']])
+                              ->whereRaw("STR_TO_DATE(edad, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL ? YEAR)", [$edadData['maxEdad']]);
+                    });
+                    break;
+                default:
+                    break;
+            }
         }
         if (isset($search['ocupacion']) && !empty($search['ocupacion'])) {
             $usuarios->where('ocupacion', 'like', '%'.$search['ocupacion'].'%');
@@ -224,9 +242,15 @@ class UsuarioOALController extends Controller
             try {
                 //Si el archivo tiene algun error, no se completará la importación.
                 Excel::import(new UsuarioOALImport, $file);
-            } catch (\Exception $e) {
-                //Deja esto vacio, ya que por algun error Laravel interpreta lo anterior con error pero el archivo se importa de forma correcta.
-                \Log::error('Error al importar archivo: ' . $e->getMessage());
+            } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+                $failures = $e->failures();
+     
+                foreach ($failures as $failure) {
+                    $failure->row(); // row that went wrong
+                    $failure->attribute(); // either heading key (if using heading row concern) or column index
+                    $failure->errors(); // Actual error messages from Laravel validator
+                    $failure->values(); // The values of the row that has failed.
+                }
             }
         }
         // return to_route('dashboard');
