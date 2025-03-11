@@ -6205,6 +6205,8 @@ export default function CreateUserForm() {
                             discapacidad: data.discapacidad.value,
                             nivel_estudios: data.estudios.value,
                             especialidad: JSON.stringify(specialtyArray),
+                            formacion_complementaria: data.formacion_comp,
+                            experiencia_laboral: data.experiencia,
                             disponibilidad: data.disponibilidad.value,
                             carnet: JSON.stringify(carnetArray),
                             vehiculo: data.vehiculo.value,

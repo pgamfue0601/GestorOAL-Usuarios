@@ -6377,6 +6377,12 @@ export default function ModifyUserForm({ usuariosOAL, contadorUsuarios }) {
 
                             setValue2('especialidad', selectedSpecialties);
                             break;
+                        case 'formacion_complementaria':
+                            setValue2('formacion_comp', elementText);
+                            break;
+                        case 'experiencia_laboral':
+                            setValue2('experiencia', elementText);
+                            break;
                         default:
                             console.error('Error en la función');
                             break;
@@ -6482,6 +6488,8 @@ export default function ModifyUserForm({ usuariosOAL, contadorUsuarios }) {
                             discapacidad: data.discapacidad,
                             nivel_estudios: data.estudios,
                             especialidad: JSON.stringify(specialtyArray),
+                            formacion_complementaria: data.formacion_comp,
+                            experiencia_laboral: data.experiencia,
                             disponibilidad: data.disponibilidad,
                             carnet: JSON.stringify(carnetArray),
                             vehiculo: data.vehiculo,

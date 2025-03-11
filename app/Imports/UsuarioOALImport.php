@@ -44,6 +44,8 @@ class UsuarioOALImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
             'discapacidad' => $row['Discapacidad'],
             'nivel_estudios' => $row['Nivel_estudios'],
             'especialidad' => $row['Especialidad'],
+            'formacion_complementaria' => $row['Formacion_complementaria'],
+            'experiencia_laboral' => $row['Experiencia_laboral'],
             'disponibilidad' => $row['Disponibilidad'],
             'carnet' => $row['Carnet'],
             'vehiculo' => $row['Vehiculo'],
