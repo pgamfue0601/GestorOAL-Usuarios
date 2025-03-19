@@ -74,6 +74,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             href={route('logout')}
                                             method="post"
                                             as="button"
+                                            className="text-danger hover:bg-dark-stroke hover:font-bold"
                                         >
                                             Cerrar sesión
                                         </Dropdown.Link>
