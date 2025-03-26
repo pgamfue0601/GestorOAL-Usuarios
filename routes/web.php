@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsuarioOALController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DocumentosUsuariosController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::get('/dashboard', [UsuarioOALController::class, 'index'])->middleware(['a
 Route::get('/search', [UsuarioOALController::class, 'search'])->middleware(['auth', 'verified'])->name('search');
 
 Route::resource('usuario_oal', UsuarioOALController::class)->middleware(['auth', 'verified']);
+
+Route::get('/usuarioGestor/all', [UserController::class, 'getAll'])->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

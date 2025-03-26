@@ -1,7 +1,7 @@
 import ModifyUserFormSearch from '@/Components/ModifyUserFormSearch';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import OALHeaderLayout from '@/Layouts/OALHeaderLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
@@ -15,6 +15,8 @@ export default function Search() {
         control,
         formState: { errors },
     } = useForm();
+
+    const admins = usePage().props.users;
 
     const ocupacionOptions = [
         { value: 'Abogado/a', label: 'Abogado/a' },
@@ -6142,6 +6144,11 @@ export default function Search() {
         { value: 'entre', label: 'Entre' },
     ];
 
+    const usersOptions = [];
+    admins.forEach((admin) => {
+        usersOptions.push({ value: admin.name, label: admin.name });
+    });
+
     const [search, setSearch] = useState(false);
     const [contadorUsuarios, setContadorUsuarios] = useState(0);
     const [usuariosOAL, setUsuariosOAL] = useState([]);
@@ -6246,6 +6253,9 @@ export default function Search() {
                                     : null,
                                 observaciones: data.observaciones
                                     ? data.observaciones
+                                    : null,
+                                added_by_user: data.addedBy
+                                    ? data.addedBy.value
                                     : null,
                             };
 
@@ -6862,6 +6872,28 @@ export default function Search() {
                                         as="textarea"
                                         placeholder="Añada aquí sus observaciones"
                                         rows={3}
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formVehiculo"
+                                >
+                                    <Form.Label className="fs-4">
+                                        Añadido por
+                                    </Form.Label>
+                                    <Controller
+                                        name="addedBy"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                options={usersOptions}
+                                                placeholder="Quién ha añadido el usuario"
+                                                noOptionsMessage={() =>
+                                                    'No se encuentran usuarios.'
+                                                }
+                                            />
+                                        )}
                                     />
                                 </Form.Group>
                             </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UsuarioOAL;
+use App\Models\User;
 use App\Http\Requests\StoreUsuarioOALRequest;
 use App\Http\Requests\UpdateUsuarioOALRequest;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\DocumentosUsuariosController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsuarioOALImport;
+use Inertia\Inertia;
 
 class UsuarioOALController extends Controller
 {
@@ -28,6 +30,9 @@ class UsuarioOALController extends Controller
 
     public function search()
     {
+        Inertia::share('users', function () {
+            return User::all();
+        });
         return inertia("Search");
     }
     /**
@@ -45,7 +50,11 @@ class UsuarioOALController extends Controller
     {
 
         $usuario = UsuarioOAL::create($request->all());
-
+        
+        if (auth()->check()) {
+            $usuario->added_by_user = auth()->user()->name;
+            $usuario->save();
+        }
         return response()->json(['usuario' => $usuario]);
 
     }
@@ -229,6 +238,9 @@ class UsuarioOALController extends Controller
         }
         if (isset($search['vehiculo']) && !empty($search['vehiculo'])) {
             $usuarios->where('vehiculo', 'like', '%'.$search['vehiculo'].'%');
+        }
+        if (isset($search['added_by_user']) && !empty($search['added_by_user'])) {
+            $usuarios->where('added_by_user', 'like', $search['added_by_user']);
         }
         $usuarios->orderBy('created_at', 'desc');
 

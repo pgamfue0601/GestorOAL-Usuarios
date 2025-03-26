@@ -7354,6 +7354,7 @@ export default function ModifyUserForm({ usuariosOAL, contadorUsuarios }) {
                                 <th>Vehículo</th>
                                 <th>Localidad</th>
                                 <th>Observaciones</th>
+                                <th>Añadido por</th>
                                 <th>¿Eliminar?</th>
                             </tr>
                         </thead>
@@ -7458,6 +7459,9 @@ export default function ModifyUserForm({ usuariosOAL, contadorUsuarios }) {
                                     </td>
                                     <td onClick={modificarUsuario(usuario.id)}>
                                         {usuario.observaciones}
+                                    </td>
+                                    <td onClick={modificarUsuario(usuario.id)}>
+                                        {usuario.added_by_user}
                                     </td>
                                     <td className="text-center">
                                         <Form
